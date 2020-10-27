@@ -3,7 +3,7 @@
 Artifact Correction by AJDC-based Blind Source Separation
 =========================================================
 
-Blind source separation (BSS) based on approximate joint diagonalization of 
+Blind source separation (BSS) based on approximate joint diagonalization of
 Fourier cospectra (AJDC), applied to artifact correction of EEG [1].
 """
 # Authors: Quentin Barthélemy & David Ojeda.
@@ -20,15 +20,6 @@ from mne.preprocessing import ICA
 from pyriemann.spatialfilters import AJDC
 from matplotlib import pyplot as plt
 
-import warnings
-from mne import __version__ as v
-if v != '0.18.2':
-    warnings.warn('This example has only been tested with mne version 0.18.2',
-                  UserWarning)
-
-
-###############################################################################
-
 
 def read_header(fname):
     with open(fname, "r") as f:
@@ -42,7 +33,7 @@ def plot_cospectra(cosp, title, ch_names=None):
     fig.suptitle(title)
     for f in range(cosp.shape[0]):
         ax = plt.subplot(4, 8, f+1)
-        plt.imshow(cosp[f,: , :], cmap=plt.get_cmap('YlGnBu'))
+        plt.imshow(cosp[f, :, :], cmap=plt.get_cmap('YlGnBu'))
         plt.title('{} Hz'.format(f+1))
         plt.xticks([])
         if ch_names and f == 0:
@@ -69,8 +60,8 @@ duration = signal_raw.shape[1] / sfreq
 # ------------
 
 # Plot signal
-info = create_info(ch_names=ch_names, ch_types=['eeg'] * ch_count, sfreq=sfreq,
-                   montage='standard_1020')
+info = create_info(ch_names=ch_names, ch_types=['eeg'] * ch_count, sfreq=sfreq)
+info.set_montage('standard_1020', match_case=False)
 signal = RawArray(signal_raw, info, verbose=False)
 signal.plot(duration=duration, start=0, n_channels=ch_count,
             scalings={'eeg': 1e2}, color={'eeg': 'steelblue'},
